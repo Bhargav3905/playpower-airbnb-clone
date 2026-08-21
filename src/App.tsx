@@ -1,10 +1,7 @@
-function App() {
+import { ListingPage } from "./pages/ListingPage"
 
-  return (
-    <>
-      
-    </>
-  )
+function App() {
+  return <ListingPage />
 }
 
 export default App
