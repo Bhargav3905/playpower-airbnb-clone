@@ -19,6 +19,8 @@ import { ListingOverview } from "../components/listing/ListingOverview";
 import { PropertyDescription } from "../components/listing/PropertyDescription";
 import { SleepingArrangements } from "../components/listing/SleepingArrangements";
 import { AmenitiesSection } from "../components/listing/AmenitiesSection";
+import { AvailabilityCalendar } from "../components/listing/AvailabilityCalendar";
+import { BookingSidebar } from "../components/listing/BookingSidebar";
 import { HeroGallery } from "../components/gallery/HeroGallery";
 import { getPhotoByGlobalIndex } from "../data/photos";
 import type { Photo } from "../types";
@@ -151,42 +153,44 @@ export function ListingPage() {
           onShowAllPhotos={handleShowAllPhotos}
         />
 
-        {/*
-          Left-column content width only for now — the right-side
-          booking sidebar (price, dates, Reserve) isn't built yet.
-        */}
-        <div className="max-w-[700px]">
-          <ListingOverview
-            subtitle="Entire serviced apartment in Candolim, India"
-            guests={3}
-            bedrooms={1}
-            beds={1}
-            bathrooms={1}
-            guestFavouriteDescription="One of the most loved homes on Airbnb, according to guests"
-            rating={4.95}
-            reviewCount={19}
-            hostName="Mirashya Homes"
-            hostingDuration="2 years hosting"
-            highlights={LISTING_HIGHLIGHTS}
-            onShowOriginal={handleShowOriginal}
-          />
+        <div className="grid items-start gap-x-12 lg:grid-cols-[minmax(0,1fr)_390px]">
+          <div className="max-w-[700px]">
+            <ListingOverview
+              subtitle="Entire serviced apartment in Candolim, India"
+              guests={3}
+              bedrooms={1}
+              beds={1}
+              bathrooms={1}
+              guestFavouriteDescription="One of the most loved homes on Airbnb, according to guests"
+              rating={4.95}
+              reviewCount={19}
+              hostName="Mirashya Homes"
+              hostingDuration="2 years hosting"
+              highlights={LISTING_HIGHLIGHTS}
+              onShowOriginal={handleShowOriginal}
+            />
 
-          <PropertyDescription
-            text={LISTING_DESCRIPTION}
-            onShowMore={handleShowMoreDescription}
-          />
+            <PropertyDescription
+              text={LISTING_DESCRIPTION}
+              onShowMore={handleShowMoreDescription}
+            />
 
-          <div className="border-t border-neutral-200" />
+            <div className="border-t border-neutral-200" />
 
-          <SleepingArrangements rooms={sleepingRooms} />
+            <SleepingArrangements rooms={sleepingRooms} />
 
-          <div className="border-t border-neutral-200" />
+            <div className="border-t border-neutral-200" />
 
-          <AmenitiesSection
-            amenities={VISIBLE_AMENITIES}
-            totalCount={TOTAL_AMENITIES_COUNT}
-            onShowAll={handleShowAllAmenities}
-          />
+            <AmenitiesSection
+              amenities={VISIBLE_AMENITIES}
+              totalCount={TOTAL_AMENITIES_COUNT}
+              onShowAll={handleShowAllAmenities}
+            />
+
+            <AvailabilityCalendar />
+          </div>
+
+          <BookingSidebar />
         </div>
       </main>
     </div>
