@@ -1,4 +1,4 @@
-import { Globe, Menu, Search, UserCircle } from 'lucide-react';
+import { Globe, Home, Menu, Search, UserCircle } from "lucide-react";
 
 /**
  * Static, desktop-only top navigation bar.
@@ -10,16 +10,29 @@ export function Navbar() {
     <header className="w-full border-b border-neutral-200 bg-white">
       <div className="mx-auto flex h-20 max-w-[1760px] items-center justify-between px-6 lg:px-10">
         {/* Logo */}
-        <a href="/" className="text-2xl font-bold text-rose-500">
+        <a
+          href="/"
+          className="flex items-center gap-1.5 text-2xl font-bold text-rose-500"
+        >
+          <Home size={26} strokeWidth={2.5} />
           airbnb
         </a>
 
         {/* Center search pill */}
-        <div className="hidden items-center rounded-full border border-neutral-200 py-2 pl-6 pr-2 shadow-sm hover:shadow-md transition-shadow md:flex">
-          <button type="button" className="border-r border-neutral-200 pr-4 text-sm font-semibold">
+        <div className="hidden items-center rounded-full border border-neutral-200 py-2 pl-4 pr-2 shadow-sm hover:shadow-md transition-shadow md:flex">
+          <span className="pr-3 text-neutral-700">
+            <Home size={18} />
+          </span>
+          <button
+            type="button"
+            className="border-r border-neutral-200 pr-4 text-sm font-semibold"
+          >
             Anywhere
           </button>
-          <button type="button" className="border-r border-neutral-200 px-4 text-sm font-semibold">
+          <button
+            type="button"
+            className="border-r border-neutral-200 px-4 text-sm font-semibold"
+          >
             Anytime
           </button>
           <button type="button" className="pl-4 pr-2 text-sm text-neutral-500">

@@ -1,6 +1,6 @@
-import { LayoutGrid } from 'lucide-react';
-import { GalleryImage } from './GalleryImage';
-import type { Photo } from '../../types';
+import { Grid3x3 } from "lucide-react";
+import { GalleryImage } from "./GalleryImage";
+import type { Photo } from "../../types";
 
 interface HeroGalleryProps {
   photos: Photo[];
@@ -20,13 +20,15 @@ export function HeroGallery({ photos, onShowAllPhotos }: HeroGalleryProps) {
   const [main, ...rest] = photos.slice(0, 5);
 
   return (
-    <div className="relative grid h-[480px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
-      {main && (
-        <GalleryImage photo={main} className="col-span-2 row-span-2" />
-      )}
+    <div className="relative grid h-[480px] grid-cols-4 grid-rows-2 gap-1 overflow-hidden rounded-xl">
+      {main && <GalleryImage photo={main} className="col-span-2 row-span-2" />}
 
       {rest.map((photo) => (
-        <GalleryImage key={photo.id} photo={photo} className="col-span-1 row-span-1" />
+        <GalleryImage
+          key={photo.id}
+          photo={photo}
+          className="col-span-1 row-span-1"
+        />
       ))}
 
       <button
@@ -34,7 +36,7 @@ export function HeroGallery({ photos, onShowAllPhotos }: HeroGalleryProps) {
         onClick={onShowAllPhotos}
         className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md hover:bg-neutral-50 transition-colors"
       >
-        <LayoutGrid size={16} />
+        <Grid3x3 size={16} />
         Show all photos
       </button>
     </div>
