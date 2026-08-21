@@ -21,6 +21,11 @@ import { SleepingArrangements } from "../components/listing/SleepingArrangements
 import { AmenitiesSection } from "../components/listing/AmenitiesSection";
 import { AvailabilityCalendar } from "../components/listing/AvailabilityCalendar";
 import { BookingSidebar } from "../components/listing/BookingSidebar";
+import { ReviewsSection } from "../components/listing/ReviewsSection";
+import { LocationSection } from "../components/listing/LocationSection";
+import { HostSection } from "../components/listing/HostSection";
+import { ThingsToKnow } from "../components/listing/ThingsToKnow";
+import { NearbyStays } from "../components/listing/NearbyStays";
 import { HeroGallery } from "../components/gallery/HeroGallery";
 import { getPhotoByGlobalIndex } from "../data/photos";
 import type { Photo } from "../types";
@@ -94,6 +99,14 @@ const VISIBLE_AMENITIES: Amenity[] = [
 
 const TOTAL_AMENITIES_COUNT = 50;
 
+const NEARBY_STAY_CONFIG = [
+  { globalIndex: 1, title: "Beautiful Studio with a view to die for", price: "₹23,600", rating: "4.91" },
+  { globalIndex: 4, title: "NAGQAB - 1bhk with private pool", price: "₹42,218", rating: "4.95" },
+  { globalIndex: 6, title: "Greentique Luxury Flat with plunge pool, Calangute", price: "₹44,506", rating: "4.94" },
+  { globalIndex: 8, title: "The Tropical Studio | 5 mins to Beach", price: "₹22,824", rating: "4.96" },
+  { globalIndex: 10, title: "Luxury Casa Bella 1BHK with plunge pool, Calangute", price: "₹39,942", rating: "4.95" },
+];
+
 export function ListingPage() {
   const heroPhotos = HERO_GLOBAL_INDICES.map(getPhotoByGlobalIndex).filter(
     (photo): photo is Photo => photo !== undefined,
@@ -108,6 +121,11 @@ export function ListingPage() {
     (room): room is { photo: Photo; label: string; description: string } =>
       room !== undefined,
   );
+
+  const nearbyStays = NEARBY_STAY_CONFIG.map((stay) => {
+    const photo = getPhotoByGlobalIndex(stay.globalIndex);
+    return photo ? { ...stay, photo } : undefined;
+  }).filter((stay): stay is (typeof NEARBY_STAY_CONFIG)[number] & { photo: Photo } => stay !== undefined);
 
   // Placeholder — Photo Tour / Lightbox navigation isn't implemented yet.
   const handleShowAllPhotos = () => {
@@ -188,6 +206,16 @@ export function ListingPage() {
             />
 
             <AvailabilityCalendar />
+
+            <ReviewsSection />
+
+            <LocationSection />
+
+            <HostSection />
+
+            <ThingsToKnow />
+
+            <NearbyStays stays={nearbyStays} />
           </div>
 
           <BookingSidebar />
