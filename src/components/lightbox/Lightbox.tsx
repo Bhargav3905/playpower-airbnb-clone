@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Heart, Share, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Grid3x3, X } from "lucide-react";
 import { photos, totalPhotos } from "../../data/photos";
 
 interface LightboxProps {
   initialGlobalIndex: number;
   onClose: () => void;
+  onIndexChange?: (newGlobalIndex: number) => void;
   onShare?: () => void;
   onSave?: () => void;
 }
@@ -12,8 +13,7 @@ interface LightboxProps {
 export function Lightbox({
   initialGlobalIndex,
   onClose,
-  onShare,
-  onSave,
+  onIndexChange,
 }: LightboxProps) {
   const [currentGlobalIndex, setCurrentGlobalIndex] = useState(initialGlobalIndex);
 
@@ -21,15 +21,24 @@ export function Lightbox({
   const currentPhoto = photos.find((p) => p.globalIndex === currentGlobalIndex) || photos[0];
   const photoPosition = photos.findIndex((p) => p.globalIndex === currentGlobalIndex);
 
+  const isFirstPhoto = photoPosition <= 0;
+  const isLastPhoto = photoPosition >= photos.length - 1;
+
   const handlePrev = useCallback(() => {
-    const prevPos = photoPosition > 0 ? photoPosition - 1 : photos.length - 1;
-    setCurrentGlobalIndex(photos[prevPos].globalIndex);
-  }, [photoPosition]);
+    if (photoPosition > 0) {
+      const newIdx = photos[photoPosition - 1].globalIndex;
+      setCurrentGlobalIndex(newIdx);
+      onIndexChange?.(newIdx);
+    }
+  }, [photoPosition, onIndexChange]);
 
   const handleNext = useCallback(() => {
-    const nextPos = photoPosition < photos.length - 1 ? photoPosition + 1 : 0;
-    setCurrentGlobalIndex(photos[nextPos].globalIndex);
-  }, [photoPosition]);
+    if (photoPosition < photos.length - 1) {
+      const newIdx = photos[photoPosition + 1].globalIndex;
+      setCurrentGlobalIndex(newIdx);
+      onIndexChange?.(newIdx);
+    }
+  }, [photoPosition, onIndexChange]);
 
   // Keyboard navigation & lock background scroll
   useEffect(() => {
@@ -58,83 +67,83 @@ export function Lightbox({
       role="dialog"
       aria-modal="true"
       aria-label="Full-screen photo gallery"
-      className="fixed inset-0 z-50 flex flex-col bg-black/95 text-white backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex flex-col bg-white text-neutral-900 animate-in fade-in duration-150 select-none"
     >
       {/* Top Header */}
-      <header className="flex h-16 w-full shrink-0 items-center justify-between px-6">
+      <header className="flex h-16 w-full shrink-0 items-center justify-between px-6 pt-2">
+        {/* Left: 9-dot grid button */}
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close lightbox"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+          aria-label="Back to photo tour"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-800 transition-colors hover:bg-neutral-100 cursor-pointer"
         >
-          <X size={20} />
+          <Grid3x3 size={18} />
         </button>
 
-        <div className="text-sm font-semibold text-white/90">
-          {photoPosition + 1} / {totalPhotos}
+        {/* Center: Category title */}
+        <div className="text-sm font-semibold text-neutral-900">
+          {currentPhoto.category}
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Right: Counter + Close X button */}
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-neutral-800 font-normal">
+            {photoPosition + 1} of {totalPhotos}
+          </span>
           <button
             type="button"
-            onClick={onShare}
-            aria-label="Share listing"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+            onClick={onClose}
+            aria-label="Close photo viewer"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-800 transition-colors hover:bg-neutral-100 cursor-pointer"
           >
-            <Share size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={onSave}
-            aria-label="Save listing"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
-          >
-            <Heart size={18} />
+            <X size={20} />
           </button>
         </div>
       </header>
 
       {/* Main Image Stage */}
-      <main className="relative flex flex-1 items-center justify-between px-4 sm:px-8">
-        {/* Previous Button */}
+      <main className="relative flex flex-1 items-center justify-between px-6 sm:px-12 py-4">
+        {/* Previous Navigation Button */}
         <button
           type="button"
           onClick={handlePrev}
+          disabled={isFirstPhoto}
           aria-label="Previous photo"
-          className="z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white transition-all hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-lg"
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all ${
+            isFirstPhoto
+              ? "border-neutral-200 bg-white text-neutral-300 opacity-40 cursor-not-allowed pointer-events-none"
+              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:bg-neutral-50 active:scale-95 cursor-pointer"
+          }`}
         >
-          <ChevronLeft size={24} />
+          <ChevronLeft size={20} />
         </button>
 
-        {/* Current Photo Display */}
-        <div className="flex flex-1 items-center justify-center p-4">
+        {/* Main Photo Display */}
+        <div className="flex flex-1 items-center justify-center h-full max-h-[82vh] px-4">
           <img
             key={currentPhoto.id}
             src={currentPhoto.src}
             alt={`${currentPhoto.category} photo ${currentPhoto.categoryIndex}`}
-            className="max-h-[75vh] max-w-full rounded-lg object-contain shadow-2xl transition-opacity duration-200 select-none"
+            className="max-h-[80vh] max-w-full object-contain shadow-xs select-none"
           />
         </div>
 
-        {/* Next Button */}
+        {/* Next Navigation Button */}
         <button
           type="button"
           onClick={handleNext}
+          disabled={isLastPhoto}
           aria-label="Next photo"
-          className="z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white transition-all hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-lg"
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all ${
+            isLastPhoto
+              ? "border-neutral-200 bg-white text-neutral-300 opacity-40 cursor-not-allowed pointer-events-none"
+              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:bg-neutral-50 active:scale-95 cursor-pointer"
+          }`}
         >
-          <ChevronRight size={24} />
+          <ChevronRight size={20} />
         </button>
       </main>
-
-      {/* Bottom Caption */}
-      <footer className="flex h-16 w-full shrink-0 flex-col items-center justify-center pb-2 text-center text-xs text-white/70">
-        <p className="font-semibold text-sm text-white">{currentPhoto.category}</p>
-        <p className="mt-0.5 text-neutral-400">
-          Photo {currentPhoto.categoryIndex} of {photos.filter(p => p.category === currentPhoto.category).length} in {currentPhoto.category} · Global photo {currentPhoto.globalIndex} of {totalPhotos}
-        </p>
-      </footer>
     </div>
   );
 }

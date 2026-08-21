@@ -179,6 +179,11 @@ export function ListingPage() {
     window.history.pushState({}, "", `?modal=PHOTO_TOUR_SCROLLABLE&photo=${globalIndex}`);
   }, []);
 
+  const handleLightboxIndexChange = useCallback((newIndex: number) => {
+    setLightboxIndex(newIndex);
+    window.history.replaceState({}, "", `?modal=PHOTO_TOUR_SCROLLABLE&photo=${newIndex}`);
+  }, []);
+
   const handleCloseLightbox = useCallback(() => {
     setLightboxIndex(null);
     window.history.pushState({}, "", "?modal=PHOTO_TOUR_SCROLLABLE");
@@ -229,8 +234,10 @@ export function ListingPage() {
         />
         {lightboxIndex !== null && (
           <Lightbox
+            key={lightboxIndex}
             initialGlobalIndex={lightboxIndex}
             onClose={handleCloseLightbox}
+            onIndexChange={handleLightboxIndexChange}
             onShare={handleShare}
             onSave={handleSave}
           />
