@@ -5,3 +5,9 @@ export interface ListingHighlight {
   title: string;
   description: string;
 }
+
+export interface Amenity {
+  icon: LucideIcon;
+  label: string;
+  available: boolean;
+}
