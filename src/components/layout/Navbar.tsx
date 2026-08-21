@@ -8,7 +8,7 @@ import { Globe, Home, Menu, Search, UserCircle } from "lucide-react";
 export function Navbar() {
   return (
     <header className="w-full border-b border-neutral-200 bg-white">
-      <div className="mx-auto flex h-20 max-w-[1760px] items-center justify-between px-6 lg:px-10">
+      <div className="mx-auto flex h-20 max-w-[1120px] items-center justify-between px-6 lg:px-8">
         {/* Logo */}
         <a
           href="/"

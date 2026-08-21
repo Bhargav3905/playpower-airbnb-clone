@@ -4,18 +4,11 @@ interface HostInfoProps {
   avatarInitial?: string;
 }
 
-/**
- * "Hosted by Mirashya Homes" row with a simple circular avatar.
- * No real host photo asset is available, so we render an initial
- * on a solid background rather than inventing an image.
- */
-export function HostInfo({ hostName, hostingDuration, avatarInitial }: HostInfoProps) {
-  const initial = avatarInitial ?? hostName.charAt(0).toUpperCase();
-
+export function HostInfo({ hostName, hostingDuration }: HostInfoProps) {
   return (
     <div className="flex items-center gap-4 py-6">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-900 text-lg font-semibold text-white">
-        {initial}
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1b4332] text-[9px] font-bold tracking-wider text-white select-none">
+        MIRASHYA
       </div>
       <div>
         <p className="text-base font-semibold text-neutral-900">

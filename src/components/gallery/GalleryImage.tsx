@@ -12,11 +12,11 @@ interface GalleryImageProps {
  */
 export function GalleryImage({ photo, className = '' }: GalleryImageProps) {
   return (
-    <div className={`overflow-hidden bg-neutral-100 ${className}`}>
+    <div className={`group overflow-hidden bg-neutral-100 cursor-pointer ${className}`}>
       <img
         src={photo.src}
         alt={`${photo.category} photo ${photo.categoryIndex}`}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
       />
     </div>
   );

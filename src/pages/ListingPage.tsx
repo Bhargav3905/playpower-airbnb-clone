@@ -14,6 +14,7 @@ import {
   AlarmSmoke,
 } from "lucide-react";
 import { Navbar } from "../components/layout/Navbar";
+import { StickyNav } from "../components/layout/StickyNav";
 import { ListingHeader } from "../components/listing/ListingHeader";
 import { ListingOverview } from "../components/listing/ListingOverview";
 import { PropertyDescription } from "../components/listing/PropertyDescription";
@@ -156,23 +157,27 @@ export function ListingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white text-neutral-900">
+      <StickyNav />
       <Navbar />
 
-      <main className="mx-auto max-w-[1400px] px-6 py-6 lg:px-10">
-        <ListingHeader
-          title={LISTING_TITLE}
-          onShare={handleShare}
-          onSave={handleSave}
-        />
+      <main className="mx-auto max-w-[1120px] px-6 py-6 lg:px-8">
+        <div id="photos">
+          <ListingHeader
+            title={LISTING_TITLE}
+            onShare={handleShare}
+            onSave={handleSave}
+          />
 
-        <HeroGallery
-          photos={heroPhotos}
-          onShowAllPhotos={handleShowAllPhotos}
-        />
+          <HeroGallery
+            photos={heroPhotos}
+            onShowAllPhotos={handleShowAllPhotos}
+          />
+        </div>
 
-        <div className="grid items-start gap-x-12 lg:grid-cols-[minmax(0,1fr)_390px]">
-          <div className="max-w-[700px]">
+        {/* 2-Column Content Section: Overview & Sticky Sidebar */}
+        <div className="mt-8 grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_370px]">
+          <div className="min-w-0">
             <ListingOverview
               subtitle="Entire serviced apartment in Candolim, India"
               guests={3}
@@ -197,29 +202,36 @@ export function ListingPage() {
 
             <SleepingArrangements rooms={sleepingRooms} />
 
-            <div className="border-t border-neutral-200" />
+            <div id="amenities" className="border-t border-neutral-200 scroll-mt-24">
+              <AmenitiesSection
+                amenities={VISIBLE_AMENITIES}
+                totalCount={TOTAL_AMENITIES_COUNT}
+                onShowAll={handleShowAllAmenities}
+              />
+            </div>
 
-            <AmenitiesSection
-              amenities={VISIBLE_AMENITIES}
-              totalCount={TOTAL_AMENITIES_COUNT}
-              onShowAll={handleShowAllAmenities}
-            />
-
-            <AvailabilityCalendar />
-
-            <ReviewsSection />
-
-            <LocationSection />
-
-            <HostSection />
-
-            <ThingsToKnow />
-
-            <NearbyStays stays={nearbyStays} />
+            <div className="border-t border-neutral-200">
+              <AvailabilityCalendar />
+            </div>
           </div>
 
           <BookingSidebar />
         </div>
+
+        {/* Full-width Sections Below 2-Column Content */}
+        <div id="reviews" className="scroll-mt-24">
+          <ReviewsSection />
+        </div>
+
+        <div id="location" className="scroll-mt-24">
+          <LocationSection />
+        </div>
+
+        <HostSection />
+
+        <ThingsToKnow />
+
+        <NearbyStays stays={nearbyStays} />
       </main>
     </div>
   );
