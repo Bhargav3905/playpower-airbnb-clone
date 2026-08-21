@@ -35,18 +35,54 @@ const reviews = [
     name: "Amit",
     tenure: "2 months on Airbnb",
     initial: "A",
-    avatarBg: "bg-amber-100 text-amber-800",
-    date: "October 2025",
-    text: "A comfortable place to stay with everything needed for a relaxing visit.",
-    showMore: true,
+    avatarBg: "bg-amber-100 text-amber-900",
+    date: "1 week ago",
+    text: "Very helpful and responsive team. Safe and peaceful stay. loved everything about the property.",
+    showMore: false,
   },
   {
     name: "Aheesh",
     tenure: "3 years on Airbnb",
     initial: "A",
-    avatarBg: "bg-neutral-800 text-white",
-    date: "September 2025",
-    text: "A lovely home in a convenient location. The stay was comfortable and easy.",
+    avatarBg: "bg-emerald-800 text-white",
+    date: "2 weeks ago",
+    text: "We had a wonderful stay. The apartment was clean, comfortable, and exactly as shown in the photos. The host was very responsive and helpful throughout our stay. We would definitely recommend this place and would love to stay here again.",
+    showMore: true,
+  },
+  {
+    name: "Samiksha",
+    tenure: "8 months on Airbnb",
+    initial: "S",
+    avatarBg: "bg-rose-100 text-rose-900",
+    date: "May 2026",
+    text: "the host nitish was really great help",
+    showMore: false,
+  },
+  {
+    name: "Vedant",
+    tenure: "4 years on Airbnb",
+    initial: "V",
+    avatarBg: "bg-purple-100 text-purple-900",
+    date: "May 2026",
+    text: "We had an amazing stay at this property in Goa! The entire home was spotless and exceptionally well-maintained, making us feel comfortable from the moment we arrived. The cleanliness standards were truly impressive, with every corner of the house looking fresh and pristine....",
+    showMore: true,
+  },
+  {
+    name: "Vaibhav S",
+    tenure: "3 years on Airbnb",
+    initial: "V",
+    avatarBg: "bg-blue-100 text-blue-900",
+    date: "May 2026",
+    text: "Great great experience living out there , can't expect more , will always look for it in the future and will recommend my friends too.",
+    showMore: false,
+  },
+  {
+    name: "Mohd",
+    tenure: "5 years on Airbnb",
+    initial: "M",
+    avatarBg: "bg-stone-700 text-white",
+    date: "May 2026",
+    text: "Great place. Exactly as described in the listing.",
     showMore: false,
   },
 ];
@@ -77,7 +113,7 @@ function ReviewCard({ review }: { review: (typeof reviews)[number] }) {
   return (
     <article className="space-y-3">
       <div className="flex items-center gap-3">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-full text-lg font-medium ${review.avatarBg}`}>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-full text-base font-semibold ${review.avatarBg}`}>
           {review.initial}
         </div>
         <div>
@@ -92,7 +128,7 @@ function ReviewCard({ review }: { review: (typeof reviews)[number] }) {
           ))}
         </div>
         <span aria-hidden="true">·</span>
-        <span className="font-medium">{review.date}</span>
+        <span className="font-semibold text-xs text-neutral-800">{review.date}</span>
       </div>
       <p className="text-sm leading-relaxed text-neutral-800">{review.text}</p>
       {review.showMore && (

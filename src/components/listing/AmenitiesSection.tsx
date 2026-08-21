@@ -7,24 +7,18 @@ interface AmenitiesSectionProps {
   onShowAll?: () => void;
 }
 
-/**
- * "What this place offers" heading, a 2-column amenity grid, and the
- * "Show all N amenities" button. Only the visible subset of amenities
- * is rendered here — the full list lives behind the button, which is
- * a presentational placeholder for now.
- */
 export function AmenitiesSection({
   amenities,
   totalCount,
   onShowAll,
 }: AmenitiesSectionProps) {
   return (
-    <div className="py-6">
-      <h2 className="mb-4 text-xl font-semibold text-neutral-900">
+    <div className="py-8">
+      <h2 className="mb-6 text-xl font-semibold text-neutral-900">
         What this place offers
       </h2>
 
-      <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
         {amenities.map((amenity) => (
           <AmenityItem
             key={amenity.label}
@@ -38,7 +32,7 @@ export function AmenitiesSection({
       <button
         type="button"
         onClick={onShowAll}
-        className="mt-6 rounded-lg border border-neutral-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:bg-neutral-50 transition-colors"
+        className="mt-8 rounded-lg border border-neutral-900 bg-white px-6 py-3.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50 active:scale-95 cursor-pointer"
       >
         Show all {totalCount} amenities
       </button>

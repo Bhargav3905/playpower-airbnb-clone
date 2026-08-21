@@ -3,6 +3,7 @@ import type { Photo } from "../../types";
 interface GalleryImageProps {
   photo: Photo;
   className?: string;
+  onClick?: () => void;
 }
 
 /**
@@ -10,9 +11,12 @@ interface GalleryImageProps {
  * `className` is expected to carry sizing / rounding for the
  * specific grid position it's placed in.
  */
-export function GalleryImage({ photo, className = '' }: GalleryImageProps) {
+export function GalleryImage({ photo, className = '', onClick }: GalleryImageProps) {
   return (
-    <div className={`group overflow-hidden bg-neutral-100 cursor-pointer ${className}`}>
+    <div
+      onClick={onClick}
+      className={`group overflow-hidden bg-neutral-100 cursor-pointer ${className}`}
+    >
       <img
         src={photo.src}
         alt={`${photo.category} photo ${photo.categoryIndex}`}

@@ -5,18 +5,10 @@ import type { Photo } from "../../types";
 interface HeroGalleryProps {
   photos: Photo[];
   onShowAllPhotos: () => void;
+  onPhotoClick?: (globalIndex: number) => void;
 }
 
-/**
- * Airbnb-style hero gallery: one large image on the left and a
- * 2x2 grid of smaller images on the right, with a "Show all photos"
- * button overlaid on the bottom-right tile.
- *
- * Expects exactly 5 photos (in display order). Extra photos are
- * ignored here — the full set lives behind "Show all photos"
- * (Photo Tour / Lightbox, not implemented yet).
- */
-export function HeroGallery({ photos, onShowAllPhotos }: HeroGalleryProps) {
+export function HeroGallery({ photos, onShowAllPhotos, onPhotoClick }: HeroGalleryProps) {
   const [main, ...rest] = photos.slice(0, 5);
 
   const getTileCornerClass = (index: number) => {
@@ -29,7 +21,11 @@ export function HeroGallery({ photos, onShowAllPhotos }: HeroGalleryProps) {
     <div className="relative grid h-[360px] sm:h-[420px] md:h-[460px] lg:h-[480px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
       {main && (
         <div className="col-span-2 row-span-2 overflow-hidden rounded-l-xl">
-          <GalleryImage photo={main} className="h-full w-full" />
+          <GalleryImage
+            photo={main}
+            className="h-full w-full"
+            onClick={() => onPhotoClick?.(main.globalIndex)}
+          />
         </div>
       )}
 
@@ -38,7 +34,11 @@ export function HeroGallery({ photos, onShowAllPhotos }: HeroGalleryProps) {
           key={photo.id}
           className={`col-span-1 row-span-1 overflow-hidden ${getTileCornerClass(index)}`}
         >
-          <GalleryImage photo={photo} className="h-full w-full" />
+          <GalleryImage
+            photo={photo}
+            className="h-full w-full"
+            onClick={() => onPhotoClick?.(photo.globalIndex)}
+          />
         </div>
       ))}
 

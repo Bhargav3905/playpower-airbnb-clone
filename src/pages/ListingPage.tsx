@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from "react";
 import {
   Fan,
   DoorOpen,
@@ -28,6 +29,8 @@ import { HostSection } from "../components/listing/HostSection";
 import { ThingsToKnow } from "../components/listing/ThingsToKnow";
 import { NearbyStays } from "../components/listing/NearbyStays";
 import { HeroGallery } from "../components/gallery/HeroGallery";
+import { PhotoTour } from "../components/photo-tour/PhotoTour";
+import { Lightbox } from "../components/lightbox/Lightbox";
 import { getPhotoByGlobalIndex } from "../data/photos";
 import type { Photo } from "../types";
 
@@ -109,6 +112,36 @@ const NEARBY_STAY_CONFIG = [
 ];
 
 export function ListingPage() {
+  const [isPhotoTourOpen, setIsPhotoTourOpen] = useState(false);
+  const [tourInitialPhotoIndex, setTourInitialPhotoIndex] = useState<number | undefined>(undefined);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Sync state with browser URL search params for back/forward navigation
+  useEffect(() => {
+    const syncStateFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const modal = params.get("modal");
+      const photo = params.get("photo");
+
+      if (modal === "PHOTO_TOUR_SCROLLABLE") {
+        setIsPhotoTourOpen(true);
+        if (photo) {
+          const pIdx = parseInt(photo, 10);
+          if (!isNaN(pIdx)) setLightboxIndex(pIdx);
+        } else {
+          setLightboxIndex(null);
+        }
+      } else {
+        setIsPhotoTourOpen(false);
+        setLightboxIndex(null);
+      }
+    };
+
+    syncStateFromUrl();
+    window.addEventListener("popstate", syncStateFromUrl);
+    return () => window.removeEventListener("popstate", syncStateFromUrl);
+  }, []);
+
   const heroPhotos = HERO_GLOBAL_INDICES.map(getPhotoByGlobalIndex).filter(
     (photo): photo is Photo => photo !== undefined,
   );
@@ -128,33 +161,83 @@ export function ListingPage() {
     return photo ? { ...stay, photo } : undefined;
   }).filter((stay): stay is (typeof NEARBY_STAY_CONFIG)[number] & { photo: Photo } => stay !== undefined);
 
-  // Placeholder — Photo Tour / Lightbox navigation isn't implemented yet.
-  const handleShowAllPhotos = () => {
-    console.log("Show all photos clicked — Photo Tour not implemented yet.");
-  };
+  // Photo Tour & Lightbox actions
+  const handleShowAllPhotos = useCallback(() => {
+    setTourInitialPhotoIndex(1);
+    setIsPhotoTourOpen(true);
+    window.history.pushState({}, "", "?modal=PHOTO_TOUR_SCROLLABLE");
+  }, []);
+
+  const handleHeroPhotoClick = useCallback((globalIndex: number) => {
+    setTourInitialPhotoIndex(globalIndex);
+    setIsPhotoTourOpen(true);
+    window.history.pushState({}, "", "?modal=PHOTO_TOUR_SCROLLABLE");
+  }, []);
+
+  const handleTourPhotoClick = useCallback((globalIndex: number) => {
+    setLightboxIndex(globalIndex);
+    window.history.pushState({}, "", `?modal=PHOTO_TOUR_SCROLLABLE&photo=${globalIndex}`);
+  }, []);
+
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxIndex(null);
+    window.history.pushState({}, "", "?modal=PHOTO_TOUR_SCROLLABLE");
+  }, []);
+
+  const handleClosePhotoTour = useCallback(() => {
+    setIsPhotoTourOpen(false);
+    setLightboxIndex(null);
+    setTourInitialPhotoIndex(undefined);
+    window.history.pushState({}, "", window.location.pathname);
+  }, []);
 
   const handleShare = () => {
-    console.log("Share clicked — not implemented yet.");
+    if (navigator.share) {
+      navigator.share({ title: LISTING_TITLE, url: window.location.href }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Listing link copied to clipboard!");
+    }
   };
 
   const handleSave = () => {
-    console.log("Save clicked — not implemented yet.");
+    console.log("Save clicked");
   };
 
-  // Placeholder — no real translation toggle logic yet.
   const handleShowOriginal = () => {
-    console.log("Show original clicked — not implemented yet.");
+    console.log("Show original clicked");
   };
 
-  // Placeholder — no real expand/collapse logic yet (full copy not available).
   const handleShowMoreDescription = () => {
-    console.log("Show more clicked — not implemented yet.");
+    console.log("Show more clicked");
   };
 
-  // Placeholder — full amenities list/modal not implemented yet.
   const handleShowAllAmenities = () => {
-    console.log("Show all amenities clicked — not implemented yet.");
+    console.log("Show all amenities clicked");
   };
+
+  // If Photo Tour is open, render Photo Tour full page (+ Lightbox if active)
+  if (isPhotoTourOpen) {
+    return (
+      <>
+        <PhotoTour
+          initialGlobalIndex={tourInitialPhotoIndex}
+          onClose={handleClosePhotoTour}
+          onPhotoClick={handleTourPhotoClick}
+          onShare={handleShare}
+          onSave={handleSave}
+        />
+        {lightboxIndex !== null && (
+          <Lightbox
+            initialGlobalIndex={lightboxIndex}
+            onClose={handleCloseLightbox}
+            onShare={handleShare}
+            onSave={handleSave}
+          />
+        )}
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
@@ -172,6 +255,7 @@ export function ListingPage() {
           <HeroGallery
             photos={heroPhotos}
             onShowAllPhotos={handleShowAllPhotos}
+            onPhotoClick={handleHeroPhotoClick}
           />
         </div>
 
