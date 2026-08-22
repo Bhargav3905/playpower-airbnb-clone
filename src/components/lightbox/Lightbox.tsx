@@ -10,6 +10,18 @@ interface LightboxProps {
   onSave?: () => void;
 }
 
+const categoryDisplayNames: Record<string, string> = {
+  "Living Room 1": "Living room 1",
+  "Living Room 2": "Living room 2",
+  "Full Kitchen": "Full kitchen",
+  Bedroom: "Bedroom",
+  "Full Bathroom": "Full bathroom",
+  Gym: "Gym",
+  Exterior: "Exterior",
+  Pool: "Pool",
+  "Additional Photos": "Additional photos",
+};
+
 export function Lightbox({
   initialGlobalIndex,
   onClose,
@@ -70,7 +82,7 @@ export function Lightbox({
       className="fixed inset-0 z-50 flex flex-col bg-white text-neutral-900 animate-in fade-in duration-150 select-none"
     >
       {/* Top Header */}
-      <header className="flex h-16 w-full shrink-0 items-center justify-between px-6 pt-2">
+      <header className="flex h-16 w-full shrink-0 items-center justify-between px-6 lg:px-8">
         {/* Left: 9-dot grid button */}
         <button
           type="button"
@@ -78,17 +90,17 @@ export function Lightbox({
           aria-label="Back to photo tour"
           className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-800 transition-colors hover:bg-neutral-100 cursor-pointer"
         >
-          <Grid3x3 size={18} />
+          <Grid3x3 size={18} strokeWidth={2} />
         </button>
 
         {/* Center: Category title */}
         <div className="text-sm font-semibold text-neutral-900">
-          {currentPhoto.category}
+          {categoryDisplayNames[currentPhoto.category] || currentPhoto.category}
         </div>
 
         {/* Right: Counter + Close X button */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-neutral-800 font-normal">
+        <div className="flex items-center gap-5">
+          <span className="text-sm font-normal text-neutral-900">
             {photoPosition + 1} of {totalPhotos}
           </span>
           <button
@@ -97,35 +109,35 @@ export function Lightbox({
             aria-label="Close photo viewer"
             className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-800 transition-colors hover:bg-neutral-100 cursor-pointer"
           >
-            <X size={20} />
+            <X size={18} strokeWidth={2} />
           </button>
         </div>
       </header>
 
       {/* Main Image Stage */}
-      <main className="relative flex flex-1 items-center justify-between px-6 sm:px-12 py-4">
+      <main className="relative flex flex-1 items-center justify-center overflow-hidden px-16 sm:px-24 py-4">
         {/* Previous Navigation Button */}
         <button
           type="button"
           onClick={handlePrev}
           disabled={isFirstPhoto}
           aria-label="Previous photo"
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all ${
+          className={`absolute left-6 lg:left-8 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border transition-all ${
             isFirstPhoto
               ? "border-neutral-200 bg-white text-neutral-300 opacity-40 cursor-not-allowed pointer-events-none"
-              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:bg-neutral-50 active:scale-95 cursor-pointer"
+              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:scale-105 active:scale-95 cursor-pointer"
           }`}
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={18} strokeWidth={2} />
         </button>
 
-        {/* Main Photo Display */}
-        <div className="flex flex-1 items-center justify-center h-full max-h-[82vh] px-4">
+        {/* Center Photo Display with Generous Whitespace */}
+        <div className="flex items-center justify-center h-full w-full max-h-[calc(100vh-100px)]">
           <img
             key={currentPhoto.id}
             src={currentPhoto.src}
             alt={`${currentPhoto.category} photo ${currentPhoto.categoryIndex}`}
-            className="max-h-[80vh] max-w-full object-contain shadow-xs select-none"
+            className="max-h-[75vh] max-w-[calc(100vw-180px)] lg:max-w-[1000px] w-auto h-auto object-contain select-none"
           />
         </div>
 
@@ -135,13 +147,13 @@ export function Lightbox({
           onClick={handleNext}
           disabled={isLastPhoto}
           aria-label="Next photo"
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all ${
+          className={`absolute right-6 lg:right-8 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border transition-all ${
             isLastPhoto
               ? "border-neutral-200 bg-white text-neutral-300 opacity-40 cursor-not-allowed pointer-events-none"
-              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:bg-neutral-50 active:scale-95 cursor-pointer"
+              : "border-neutral-300 bg-white text-neutral-800 shadow-xs hover:border-neutral-900 hover:scale-105 active:scale-95 cursor-pointer"
           }`}
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={18} strokeWidth={2} />
         </button>
       </main>
     </div>

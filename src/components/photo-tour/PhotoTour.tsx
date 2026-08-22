@@ -25,6 +25,33 @@ const categoryDescriptions: Record<PhotoCategory, string> = {
   "Additional Photos": "",
 };
 
+const categoryDisplayNames: Record<PhotoCategory, string> = {
+  "Living Room 1": "Living room 1",
+  "Living Room 2": "Living room 2",
+  "Full Kitchen": "Full kitchen",
+  Bedroom: "Bedroom",
+  "Full Bathroom": "Full bathroom",
+  Gym: "Gym",
+  Exterior: "Exterior",
+  Pool: "Pool",
+  "Additional Photos": "Additional photos",
+};
+
+// Explicit photo grid patterns requested for each section:
+// '1' = full-width image
+// '2' = row of 2 smaller images matching the full-width span
+const categoryPatterns: Record<PhotoCategory, ("1" | "2")[]> = {
+  "Living Room 1": ["1", "2"],
+  "Living Room 2": ["1", "2", "1", "2", "1"],
+  "Full Kitchen": ["2"],
+  Bedroom: ["1", "2", "1", "2"],
+  "Full Bathroom": ["1"],
+  Gym: ["1", "2", "2"],
+  Exterior: ["1", "2", "1", "2"],
+  Pool: ["1", "2"],
+  "Additional Photos": ["1", "2", "1", "2", "1", "2", "1"],
+};
+
 export function PhotoTour({
   initialGlobalIndex,
   onClose,
@@ -60,145 +87,111 @@ export function PhotoTour({
   };
 
   /**
-   * Builds the Airbnb gallery layout matching reference screenshots:
-   * - 2 photos: 2-column grid [0, 1]
-   * - 5 photos (Gym): 1 large [0], 2-col [1, 2], 2-col [3, 4]
-   * - Other counts (1, 3, 6, 7, 10): alternating 1 large -> 2-col -> 1 large -> 2-col
+   * Renders photos for a category following its exact pattern ('1' or '2').
+   * Image sizes and proportions match the compact reference layout.
    */
-  const renderCategoryGallery = (photos: Photo[]) => {
-    if (photos.length === 2) {
-      return (
-        <div className="grid grid-cols-2 gap-3.5">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              id={`photo-${photo.globalIndex}`}
-              onClick={() => onPhotoClick(photo.globalIndex)}
-              className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[4/3]"
-            >
-              <img
-                src={photo.src}
-                alt={`${photo.category} photo ${photo.categoryIndex}`}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-              />
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    if (photos.length === 5) {
-      const mainPhoto = photos[0];
-      const pair1 = [photos[1], photos[2]];
-      const pair2 = [photos[3], photos[4]];
-
-      return (
-        <div className="space-y-3.5">
-          <div
-            id={`photo-${mainPhoto.globalIndex}`}
-            onClick={() => onPhotoClick(mainPhoto.globalIndex)}
-            className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[16/10] sm:aspect-[4/3] md:aspect-[3/2]"
-          >
-            <img
-              src={mainPhoto.src}
-              alt={`${mainPhoto.category} photo ${mainPhoto.categoryIndex}`}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3.5">
-            {pair1.map((photo) => (
-              <div
-                key={photo.id}
-                id={`photo-${photo.globalIndex}`}
-                onClick={() => onPhotoClick(photo.globalIndex)}
-                className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[4/3]"
-              >
-                <img
-                  src={photo.src}
-                  alt={`${photo.category} photo ${photo.categoryIndex}`}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-3.5">
-            {pair2.map((photo) => (
-              <div
-                key={photo.id}
-                id={`photo-${photo.globalIndex}`}
-                onClick={() => onPhotoClick(photo.globalIndex)}
-                className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[4/3]"
-              >
-                <img
-                  src={photo.src}
-                  alt={`${photo.category} photo ${photo.categoryIndex}`}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
+  const renderCategoryGallery = (category: PhotoCategory, photos: Photo[]) => {
+    const pattern = categoryPatterns[category] || ["1", "2"];
     const elements: React.ReactNode[] = [];
-    let i = 0;
-    let isFullWidthNext = true;
+    let photoIndex = 0;
 
-    while (i < photos.length) {
-      if (isFullWidthNext || i === photos.length - 1) {
-        const photo = photos[i];
+    pattern.forEach((type, patternIndex) => {
+      if (photoIndex >= photos.length) return;
+
+      if (type === "1") {
+        const photo = photos[photoIndex];
+        photoIndex += 1;
+
         elements.push(
           <div
-            key={photo.id}
+            key={`pattern-1-${photo.id}-${patternIndex}`}
             id={`photo-${photo.globalIndex}`}
             onClick={() => onPhotoClick(photo.globalIndex)}
-            className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[16/10] sm:aspect-[4/3] md:aspect-[3/2]"
+            className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer aspect-[16/10.5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 hover:shadow-md hover:opacity-[0.98]"
           >
             <img
               src={photo.src}
               alt={`${photo.category} photo ${photo.categoryIndex}`}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.01]"
             />
           </div>
         );
-        i += 1;
-        isFullWidthNext = false;
-      } else {
-        const photoA = photos[i];
-        const photoB = photos[i + 1];
-        elements.push(
-          <div key={`${photoA.id}-${photoB.id}`} className="grid grid-cols-2 gap-3.5">
+      } else if (type === "2") {
+        const photoA = photos[photoIndex];
+        const photoB = photos[photoIndex + 1];
+        photoIndex += 2;
+
+        if (photoA && photoB) {
+          elements.push(
             <div
+              key={`pattern-2-${photoA.id}-${photoB.id}-${patternIndex}`}
+              className="grid grid-cols-2 gap-2.5"
+            >
+              <div
+                id={`photo-${photoA.globalIndex}`}
+                onClick={() => onPhotoClick(photoA.globalIndex)}
+                className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer aspect-[1.38/1] shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 hover:shadow-md hover:opacity-[0.98]"
+              >
+                <img
+                  src={photoA.src}
+                  alt={`${photoA.category} photo ${photoA.categoryIndex}`}
+                  className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.01]"
+                />
+              </div>
+              <div
+                id={`photo-${photoB.globalIndex}`}
+                onClick={() => onPhotoClick(photoB.globalIndex)}
+                className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer aspect-[1.38/1] shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 hover:shadow-md hover:opacity-[0.98]"
+              >
+                <img
+                  src={photoB.src}
+                  alt={`${photoB.category} photo ${photoB.categoryIndex}`}
+                  className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.01]"
+                />
+              </div>
+            </div>
+          );
+        } else if (photoA) {
+          // If only 1 image left for a '2' slot, render single full width
+          elements.push(
+            <div
+              key={`pattern-1-fallback-${photoA.id}-${patternIndex}`}
               id={`photo-${photoA.globalIndex}`}
               onClick={() => onPhotoClick(photoA.globalIndex)}
-              className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[4/3]"
+              className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer aspect-[16/10.5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 hover:shadow-md hover:opacity-[0.98]"
             >
               <img
                 src={photoA.src}
                 alt={`${photoA.category} photo ${photoA.categoryIndex}`}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.01]"
               />
             </div>
-            <div
-              id={`photo-${photoB.globalIndex}`}
-              onClick={() => onPhotoClick(photoB.globalIndex)}
-              className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer shadow-xs aspect-[4/3]"
-            >
-              <img
-                src={photoB.src}
-                alt={`${photoB.category} photo ${photoB.categoryIndex}`}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-              />
-            </div>
-          </div>
-        );
-        i += 2;
-        isFullWidthNext = true;
+          );
+        }
       }
+    });
+
+    // If any trailing photos remain outside the pattern, render them safely
+    while (photoIndex < photos.length) {
+      const remainingPhoto = photos[photoIndex];
+      photoIndex += 1;
+      elements.push(
+        <div
+          key={`remaining-${remainingPhoto.id}`}
+          id={`photo-${remainingPhoto.globalIndex}`}
+          onClick={() => onPhotoClick(remainingPhoto.globalIndex)}
+          className="group overflow-hidden rounded-2xl bg-neutral-100 cursor-pointer aspect-[16/10.5] shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 hover:shadow-md hover:opacity-[0.98]"
+        >
+          <img
+            src={remainingPhoto.src}
+            alt={`${remainingPhoto.category} photo ${remainingPhoto.categoryIndex}`}
+            className="h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.01]"
+          />
+        </div>
+      );
     }
 
-    return <div className="space-y-3.5">{elements}</div>;
+    return <div className="space-y-2.5">{elements}</div>;
   };
 
   return (
@@ -236,10 +229,10 @@ export function PhotoTour({
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1120px] px-6 py-8 lg:px-8">
+      <main className="mx-auto max-w-[1020px] px-6 py-8 lg:px-8">
         {/* Top Category Thumbnail Jump Grid */}
         <section aria-label="Photo categories" className="mb-20">
-          <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-4">
+          <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
             {categoryOrder.map((category) => {
               const categoryPhotos = photosByCategory[category] || [];
               const thumbnail = categoryPhotos[0];
@@ -250,17 +243,19 @@ export function PhotoTour({
                   key={category}
                   type="button"
                   onClick={() => scrollToCategory(category)}
-                  className="group flex flex-col text-left transition-transform hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                  className="group flex flex-col text-left cursor-pointer focus:outline-hidden"
                 >
-                  <div className="overflow-hidden rounded-xl bg-neutral-100 aspect-[1.1] shadow-xs">
-                    <img
-                      src={thumbnail.src}
-                      alt={category}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+                  <div className="relative aspect-square w-full rounded-2xl">
+                    <div className="h-full w-full overflow-hidden rounded-2xl bg-neutral-100 shadow-[0_1px_4px_rgba(0,0,0,0.06)] transition-all duration-150 ease-out group-hover:scale-[1.03] group-hover:shadow-md group-hover:z-10">
+                      <img
+                        src={thumbnail.src}
+                        alt={category}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
                   </div>
-                  <span className="mt-1.5 text-xs font-semibold text-neutral-800 group-hover:text-black leading-tight">
-                    {category}
+                  <span className="mt-2 text-xs font-semibold text-neutral-800 group-hover:text-black leading-tight">
+                    {categoryDisplayNames[category] || category}
                   </span>
                 </button>
               );
@@ -269,7 +264,7 @@ export function PhotoTour({
         </section>
 
         {/* Categories & Galleries Section */}
-        <div className="space-y-4">
+        <div className="space-y-14">
           {categoryOrder.map((category) => {
             const categoryPhotos: Photo[] = photosByCategory[category] || [];
             if (categoryPhotos.length === 0) return null;
@@ -280,23 +275,23 @@ export function PhotoTour({
               <section
                 key={category}
                 id={`cat-${slug}`}
-                className="grid grid-cols-1 gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-16 py-16 border-t border-neutral-200 first:border-0 first:pt-0"
+                className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_520px] lg:justify-between"
               >
                 {/* Left Column: Category Info */}
                 <div className="lg:sticky lg:top-24 lg:self-start">
-                  <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">
-                    {category}
+                  <h2 className="text-[26px] font-semibold text-neutral-900 tracking-tight leading-tight">
+                    {categoryDisplayNames[category] || category}
                   </h2>
                   {desc && (
-                    <p className="mt-3 text-sm text-neutral-600 leading-relaxed font-normal">
+                    <p className="mt-2 text-sm text-neutral-600 leading-relaxed font-normal">
                       {desc}
                     </p>
                   )}
                 </div>
 
                 {/* Right Column: Photos Layout */}
-                <div>
-                  {renderCategoryGallery(categoryPhotos)}
+                <div className="w-full max-w-[520px]">
+                  {renderCategoryGallery(category, categoryPhotos)}
                 </div>
               </section>
             );
