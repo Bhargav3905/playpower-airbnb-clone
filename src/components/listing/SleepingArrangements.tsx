@@ -11,13 +11,10 @@ interface SleepingArrangementsProps {
   rooms: SleepingRoom[];
 }
 
-/**
- * "Where you'll sleep" heading + a grid of room cards.
- */
 export function SleepingArrangements({ rooms }: SleepingArrangementsProps) {
   return (
-    <div className="py-6">
-      <h2 className="mb-4 text-xl font-semibold text-neutral-900">
+    <section className="py-8">
+      <h2 className="mb-6 text-2xl font-semibold text-neutral-900">
         Where you&apos;ll sleep
       </h2>
       <div className="grid grid-cols-2 gap-4">
@@ -30,6 +27,6 @@ export function SleepingArrangements({ rooms }: SleepingArrangementsProps) {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

@@ -6,21 +6,18 @@ interface RoomCardProps {
   description: string;
 }
 
-/**
- * Single room tile for the "Where you'll sleep" grid.
- */
 export function RoomCard({ photo, label, description }: RoomCardProps) {
   return (
     <div>
-      <div className="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
+      <div className="aspect-[1.45/1] overflow-hidden rounded-2xl bg-neutral-100">
         <img
           src={photo.src}
           alt={label}
           className="h-full w-full object-cover"
         />
       </div>
-      <p className="mt-3 text-base font-medium text-neutral-900">{label}</p>
-      <p className="text-sm text-neutral-500">{description}</p>
+      <p className="mt-3 text-base font-semibold text-neutral-900">{label}</p>
+      <p className="mt-0.5 text-sm text-neutral-600 font-normal">{description}</p>
     </div>
   );
 }

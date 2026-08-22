@@ -25,12 +25,12 @@ function Month({
 
   return (
     <div className="min-w-0 flex-1">
-      <div className="flex items-center justify-between px-2">
+      <div className="flex items-center justify-between px-1">
         {showLeftArrow ? (
           <button
             type="button"
             aria-label="Previous month"
-            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100 transition-colors cursor-pointer text-neutral-800"
           >
             <ChevronLeft size={18} />
           </button>
@@ -44,7 +44,7 @@ function Month({
           <button
             type="button"
             aria-label="Next month"
-            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100 transition-colors cursor-pointer text-neutral-800"
           >
             <ChevronRight size={18} />
           </button>
@@ -62,29 +62,39 @@ function Month({
       <div className="mt-2 grid grid-cols-7 text-center text-sm">
         {days.map((day, index) => {
           if (day === null) {
-            return <span key={`blank-${index}`} className="h-10 w-10" />;
+            return <span key={`blank-${index}`} className="h-10 w-full" />;
           }
 
           const isStart = year === 2026 && month === 9 && day === 18;
           const isEnd = year === 2026 && month === 9 && day === 23;
           const inRange = year === 2026 && month === 9 && day > 18 && day < 23;
-          const isDisabled = year === 2026 && month === 10 && day >= 18 && day <= 28;
+          const isMuted = year === 2026 && month === 10 && day >= 15;
 
           return (
             <div
               key={`${name}-${day}`}
-              className={`flex h-10 items-center justify-center ${inRange ? "bg-neutral-100" : isStart ? "rounded-l-full bg-neutral-100" : isEnd ? "rounded-r-full bg-neutral-100" : ""
-                }`}
+              className={`flex h-10 items-center justify-center ${
+                inRange
+                  ? "bg-neutral-100"
+                  : isStart
+                  ? "rounded-l-full bg-neutral-100"
+                  : isEnd
+                  ? "rounded-r-full bg-neutral-100"
+                  : ""
+              }`}
             >
               <button
                 type="button"
-                disabled={isDisabled}
-                className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-colors ${isStart || isEnd
-                    ? "bg-neutral-900 text-white font-semibold"
-                    : isDisabled
-                      ? "text-neutral-300 line-through cursor-not-allowed"
-                      : "text-neutral-900 hover:border hover:border-neutral-900"
-                  }`}
+                disabled={isMuted}
+                className={`flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors ${
+                  isStart || isEnd
+                    ? "bg-neutral-900 text-white font-bold select-none"
+                    : inRange
+                    ? "text-neutral-900 font-semibold select-none"
+                    : isMuted
+                    ? "text-neutral-300 font-normal cursor-default select-none"
+                    : "text-neutral-900 font-medium hover:border hover:border-neutral-900 select-none cursor-pointer"
+                }`}
               >
                 {day}
               </button>
@@ -99,7 +109,7 @@ function Month({
 export function AvailabilityCalendar() {
   return (
     <section className="py-8">
-      <h2 className="text-xl font-semibold text-neutral-900">5 nights in Candolim</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900">5 nights in Candolim</h2>
       <p className="mt-1 text-sm text-neutral-500">18 Oct 2026 - 23 Oct 2026</p>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-8">
@@ -111,7 +121,7 @@ export function AvailabilityCalendar() {
         <button
           type="button"
           aria-label="Keyboard shortcuts"
-          className="flex h-8 w-8 items-center justify-center rounded-md text-neutral-800 hover:bg-neutral-100 transition-colors"
+          className="flex h-8 w-8 items-center justify-center rounded-md text-neutral-800 hover:bg-neutral-100 transition-colors cursor-pointer"
         >
           <Keyboard size={18} />
         </button>

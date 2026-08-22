@@ -109,6 +109,11 @@ const NEARBY_STAY_CONFIG = [
   { globalIndex: 6, title: "Greentique Luxury Flat with plunge pool, Calangute", price: "₹44,506", rating: "4.94" },
   { globalIndex: 8, title: "The Tropical Studio | 5 mins to Beach", price: "₹22,824", rating: "4.96" },
   { globalIndex: 10, title: "Luxury Casa Bella 1BHK with plunge pool, Calangute", price: "₹39,942", rating: "4.95" },
+  { globalIndex: 13, title: "The Tropical Studio | 5 mins to Beach", price: "₹22,824", rating: "4.96" },
+  { globalIndex: 14, title: "Luxury Casa Bella 1BHK with plunge pool, Calangute", price: "₹39,942", rating: "4.95" },
+  { globalIndex: 34, title: "Kanso by Earthen Window | Jacuzzi | Terrace | Pool", price: "₹45,648", rating: "5.0" },
+  { globalIndex: 36, title: "Luxury Apt | Private Pool | 6 Mins from Beach", price: "₹48,786", rating: "4.93" },
+  { globalIndex: 15, title: "Serendipity Cottage - Calm Stay in Calangute-Baga.", price: "₹22,824", rating: "4.92" },
 ];
 
 export function ListingPage() {

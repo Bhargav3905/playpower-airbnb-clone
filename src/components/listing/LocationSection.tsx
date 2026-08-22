@@ -61,16 +61,16 @@ export function LocationSection() {
       <p className="mt-4 text-sm text-neutral-800 font-medium">Exact location will be provided after booking.</p>
 
       <div className="mt-10 border-t border-neutral-200 pt-8">
-        <h3 className="text-2xl font-semibold text-neutral-900">Neighbourhood highlights</h3>
-        <p className="mt-4 text-base leading-relaxed text-neutral-800 max-w-3xl">
-          Candolim is a lively coastal neighbourhood with beaches, restaurants and local cafés nearby.
+        <h3 className="text-base font-semibold text-neutral-900">Neighbourhood highlights</h3>
+        <p className="mt-2 text-sm leading-normal text-neutral-800 max-w-3xl">
+          Located in the heart of Candolim, Amor de Goa offers a peaceful stay with easy access to beaches, cafés, and popular attractions.
         </p>
         <button
           type="button"
-          className="mt-4 flex items-center gap-1 text-base font-semibold text-neutral-900 underline hover:text-black cursor-pointer"
+          className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-neutral-900 underline underline-offset-2 hover:text-black cursor-pointer"
         >
           Show more
-          <ChevronRight size={16} strokeWidth={2.5} />
+          <ChevronRight size={14} strokeWidth={2.5} />
         </button>
       </div>
     </section>
