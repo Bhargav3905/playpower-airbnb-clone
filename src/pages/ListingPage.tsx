@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Fan,
   DoorOpen,
@@ -44,7 +44,7 @@ const LISTING_TITLE = "Romantic Jacuzzi 1BHK Candolim | Mirashya UG10";
 // reference screenshot. This is intentionally NOT a sequential slice
 // of the global 1-43 order — the global order stays untouched in
 // photos.ts because Photo Tour / Lightbox navigation depends on it.
-const HERO_GLOBAL_INDICES = [34, 4, 5, 13, 25];
+const HERO_GLOBAL_INDICES = [4, 5, 34, 13, 25];
 
 // All values below are taken directly from the Playpower reference
 // screenshots, not invented.
@@ -201,6 +201,10 @@ export function ListingPage() {
     window.history.pushState({}, "", window.location.pathname);
   }, []);
 
+  const [isSaved, setIsSaved] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({ title: LISTING_TITLE, url: window.location.href }).catch(() => {});
@@ -210,9 +214,19 @@ export function ListingPage() {
     }
   };
 
-  const handleSave = () => {
-    console.log("Save clicked");
-  };
+  const handleSave = useCallback(() => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    setIsSaved((prev) => {
+      const next = !prev;
+      setToastMessage(next ? "Saved to wishlist" : "Removed from wishlist");
+      return next;
+    });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  }, []);
 
   const handleShowOriginal = () => {
     console.log("Show original clicked");
@@ -257,11 +271,12 @@ export function ListingPage() {
       <Navbar />
 
       <main className="mx-auto max-w-[1120px] px-6 py-6 lg:px-8">
-        <div id="photos">
+        <div id="photos" className="relative">
           <ListingHeader
             title={LISTING_TITLE}
             onShare={handleShare}
             onSave={handleSave}
+            isSaved={isSaved}
           />
 
           <HeroGallery
@@ -269,6 +284,15 @@ export function ListingPage() {
             onShowAllPhotos={handleShowAllPhotos}
             onPhotoClick={handleHeroPhotoClick}
           />
+
+          {/* Toast Notification */}
+          {toastMessage && (
+            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-30 transition-all duration-300">
+              <div className="rounded-lg bg-[#222222] px-5 py-2.5 text-xs font-semibold text-white shadow-2xl tracking-wide select-none">
+                {toastMessage}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 2-Column Content Section: Overview & Sticky Sidebar */}
