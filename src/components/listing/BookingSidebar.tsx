@@ -24,12 +24,12 @@ export function BookingSidebar() {
       </div>
 
       {/* Main Reservation Card */}
-      <div className="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xl shadow-neutral-100">
+      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
         <p className="text-lg text-neutral-900">
           <span className="text-[22px] font-semibold text-neutral-900">
             ₹28,499
           </span>{" "}
-          <span className="text-sm font-normal text-neutral-700">for 5 nights</span>
+          <span className="text-sm font-normal text-neutral-600">for 5 nights</span>
         </p>
 
         <div className="mt-5 overflow-hidden rounded-xl border border-neutral-300">
@@ -55,13 +55,13 @@ export function BookingSidebar() {
           </button>
         </div>
 
-        <div className="mt-4 rounded-xl bg-neutral-100 px-3 py-2.5 text-center text-xs text-neutral-700">
+        <div className="mt-4 rounded-xl bg-neutral-100 py-2.5 px-3 text-center text-xs text-neutral-700">
           Free cancellation before <span className="font-semibold text-neutral-900">17 October</span>
         </div>
 
         <button
           type="button"
-          className="mt-4 w-full rounded-xl bg-[#E00B41] py-3.5 text-base font-semibold text-white transition-all hover:bg-[#D90B3E] active:scale-[0.98] cursor-pointer shadow-xs"
+          className="mt-4 w-full rounded-xl bg-[#E00B5E] py-3.5 text-base font-semibold text-white transition-all hover:bg-[#D70466] active:scale-[0.98] cursor-pointer shadow-xs"
         >
           Reserve
         </button>

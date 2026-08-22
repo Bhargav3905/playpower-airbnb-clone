@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
 interface PropertyDescriptionProps {
@@ -5,27 +6,45 @@ interface PropertyDescriptionProps {
   onShowMore?: () => void;
 }
 
-/**
- * Listing description paragraph + "Show more" control.
- *
- * The click handler is presentational only for now — we don't have
- * the full expanded copy from the reference (it's cut off in the
- * screenshot), so we're not fabricating additional text. Wiring the
- * real expand/collapse behavior is a follow-up task.
- */
 export function PropertyDescription({ text, onShowMore }: PropertyDescriptionProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setIsExpanded((prev) => !prev);
+    if (onShowMore) {
+      onShowMore();
+    }
+  };
+
   return (
     <div className="py-6">
-      <p className="whitespace-pre-line text-base leading-relaxed text-neutral-900">
-        {text}
-      </p>
+      <div className={`relative overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-none' : 'max-h-[92px]'}`}>
+        <p className="whitespace-pre-line text-base leading-relaxed text-neutral-900">
+          {text}
+        </p>
+        {!isExpanded && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white via-white/80 to-transparent"
+          />
+        )}
+      </div>
       <button
         type="button"
-        onClick={onShowMore}
-        className="mt-4 flex items-center gap-1 text-base font-semibold text-neutral-900 underline"
+        onClick={handleToggle}
+        className="mt-3 flex items-center gap-1 text-base font-semibold text-neutral-900 underline hover:text-black cursor-pointer"
       >
-        Show more
-        <ChevronRight size={16} strokeWidth={2.5} />
+        {isExpanded ? (
+          <>
+            Show less
+            <ChevronRight size={16} strokeWidth={2.5} />
+          </>
+        ) : (
+          <>
+            Show more
+            <ChevronRight size={16} strokeWidth={2.5} />
+          </>
+        )}
       </button>
     </div>
   );

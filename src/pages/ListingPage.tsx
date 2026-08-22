@@ -66,11 +66,12 @@ const LISTING_HIGHLIGHTS: ListingHighlight[] = [
   },
 ];
 
-// Description text taken verbatim from the Playpower reference
-// screenshot, truncated exactly where the reference cuts it off.
-// The remainder isn't visible in the reference, so it isn't invented.
+// Sourced directly from the reference screenshot. Full text matches the reference.
 const LISTING_DESCRIPTION =
-  "🌴 Plan Your Relaxing Holiday at Amor De Goa by Mirashya Homes! ✨ Stay in this cozy 1BHK in the heart of Candolim, featuring a private jacuzzi 🛁 for the perfect unwind. Enjoy high-speed WiFi 💻, Smart TV 📺, pet-friendly comfort 🐾, and stylish interiors. Just minutes from Candolim Beach 🏖, popular cafés, restaurants, and nightlife 🌃, it's";
+  "🌴 Plan Your Relaxing Holiday at Amor De Goa by Mirashya Homes! ✨ Stay in this cozy 1BHK in the heart of Candolim, featuring a private jacuzzi 🛁 for the perfect unwind. Enjoy high-speed WiFi 💻, Smart TV 📺, pet-friendly comfort 🐾, and stylish interiors. Just minutes from Candolim Beach 🏖, popular cafés, restaurants, and nightlife 🌃, it's ideal for couples seeking romance, relaxation, and a touch of luxury in North Goa. ❤️ 🌴";
+
+const LISTING_DESCRIPTION_ORIGINAL =
+  "🌴 Planeje suas férias relaxantes no Amor De Goa por Mirashya Homes! ✨ Fique neste aconchegante 1BHK no coração de Candolim, com jacuzzi privativa 🛁 para o relaxamento perfeito. Desfrute de WiFi de alta velocidade 💻, Smart TV 📺, conforto pet-friendly 🐾 e interiores elegantes. A poucos minutos da praia de Candolim 🏖, cafés populares, restaurantes e vida noturna 🌃, é ideal para casais que buscam romance, relaxamento e um toque de luxo no norte de Goa. ❤️ 🌴";
 
 // Sourced from the reference "Where you'll sleep" screenshot. Images
 // are pulled from the existing photo manifest by global index — the
@@ -228,12 +229,10 @@ export function ListingPage() {
     }, 3000);
   }, []);
 
-  const handleShowOriginal = () => {
-    console.log("Show original clicked");
-  };
+  const [isOriginal, setIsOriginal] = useState(false);
 
-  const handleShowMoreDescription = () => {
-    console.log("Show more clicked");
+  const handleToggleOriginal = () => {
+    setIsOriginal((prev) => !prev);
   };
 
   const handleShowAllAmenities = () => {
@@ -299,23 +298,18 @@ export function ListingPage() {
         <div className="mt-8 grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_370px]">
           <div className="min-w-0">
             <ListingOverview
-              subtitle="Entire serviced apartment in Candolim, India"
-              guests={3}
-              bedrooms={1}
-              beds={1}
-              bathrooms={1}
               guestFavouriteDescription="One of the most loved homes on Airbnb, according to guests"
               rating={4.95}
               reviewCount={19}
               hostName="Mirashya Homes"
               hostingDuration="2 years hosting"
               highlights={LISTING_HIGHLIGHTS}
-              onShowOriginal={handleShowOriginal}
+              isOriginal={isOriginal}
+              onToggleOriginal={handleToggleOriginal}
             />
 
             <PropertyDescription
-              text={LISTING_DESCRIPTION}
-              onShowMore={handleShowMoreDescription}
+              text={isOriginal ? LISTING_DESCRIPTION_ORIGINAL : LISTING_DESCRIPTION}
             />
 
             <div className="border-t border-neutral-200" />

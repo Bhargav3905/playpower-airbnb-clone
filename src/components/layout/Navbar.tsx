@@ -21,30 +21,30 @@ export function Navbar() {
         </a>
 
         {/* Center search pill */}
-        <div className="hidden items-center rounded-full border border-neutral-300 bg-white py-2 pl-3.5 pr-2 shadow-xs hover:shadow-md transition-shadow md:flex cursor-pointer select-none">
-          <span className="text-base mr-2 select-none">🏡</span>
+        <div className="hidden items-center rounded-full border border-neutral-300 bg-white py-2 pl-4 pr-2 shadow-xs hover:shadow-md transition-shadow md:flex cursor-pointer select-none">
+          <span className="text-base mr-3 select-none">🏡</span>
           <button
             type="button"
-            className="border-r border-neutral-200 pr-3.5 text-sm font-semibold text-neutral-900 cursor-pointer"
+            className="border-r border-neutral-200 pr-4 text-sm font-semibold text-neutral-900 cursor-pointer"
           >
             Anywhere
           </button>
           <button
             type="button"
-            className="border-r border-neutral-200 px-3.5 text-sm font-semibold text-neutral-900 cursor-pointer"
+            className="border-r border-neutral-200 px-4 text-sm font-semibold text-neutral-900 cursor-pointer"
           >
             Anytime
           </button>
-          <button type="button" className="pl-3.5 pr-2 text-sm text-neutral-500 font-normal cursor-pointer">
+          <button type="button" className="pl-4 pr-3 text-sm text-neutral-500 font-normal cursor-pointer">
             Add guests
           </button>
-          <span className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#FF385C] text-white">
+          <span className="ml-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#FF385C] text-white">
             <Search size={14} strokeWidth={3} />
           </span>
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <a
             href="#"
             className="hidden rounded-full px-3.5 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-100 transition-colors md:block cursor-pointer"
@@ -54,14 +54,14 @@ export function Navbar() {
           <button
             type="button"
             aria-label="Choose a language and region"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100/80 hover:bg-neutral-200/80 transition-colors cursor-pointer text-neutral-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors cursor-pointer text-neutral-800"
           >
             <Globe size={18} strokeWidth={1.5} />
           </button>
           <button
             type="button"
             aria-label="Main menu"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100/80 hover:bg-neutral-200/80 transition-colors cursor-pointer text-neutral-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors cursor-pointer text-neutral-800"
           >
             <Menu size={18} strokeWidth={1.75} />
           </button>

@@ -125,7 +125,7 @@ export function StickyNav({
           <button
             type="button"
             onClick={onReserve}
-            className="rounded-lg bg-rose-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-rose-700 active:scale-95"
+            className="rounded-full bg-[#E00B5E] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#D70466] active:scale-95 cursor-pointer shadow-xs"
           >
             Reserve
           </button>

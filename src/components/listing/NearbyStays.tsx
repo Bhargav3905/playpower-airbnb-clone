@@ -26,7 +26,7 @@ export function NearbyStays({ stays }: NearbyStaysProps) {
     setPage(0);
     setTimeout(() => {
       setIsTransitioning(false);
-    }, 1000);
+    }, 200);
   };
 
   const handleNext = () => {
@@ -35,7 +35,7 @@ export function NearbyStays({ stays }: NearbyStaysProps) {
     setPage(1);
     setTimeout(() => {
       setIsTransitioning(false);
-    }, 1000);
+    }, 200);
   };
 
   const renderCard = (stay: NearbyStay, index: number) => (
@@ -72,11 +72,10 @@ export function NearbyStays({ stays }: NearbyStaysProps) {
             aria-label="Previous stays"
             disabled={page === 0}
             onClick={handlePrev}
-            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all ${
-              page === 0
+            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all ${page === 0
                 ? "border-neutral-200 text-neutral-300 cursor-not-allowed opacity-40"
                 : "border-neutral-300 text-neutral-800 hover:border-neutral-900 hover:shadow-sm cursor-pointer"
-            }`}
+              }`}
           >
             <ChevronLeft size={16} />
           </button>
@@ -85,11 +84,10 @@ export function NearbyStays({ stays }: NearbyStaysProps) {
             aria-label="Next stays"
             disabled={page === 1}
             onClick={handleNext}
-            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all ${
-              page === 1
+            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all ${page === 1
                 ? "border-neutral-200 text-neutral-300 cursor-not-allowed opacity-40"
                 : "border-neutral-300 text-neutral-800 hover:border-neutral-900 hover:shadow-sm cursor-pointer"
-            }`}
+              }`}
           >
             <ChevronRight size={16} />
           </button>
@@ -98,7 +96,7 @@ export function NearbyStays({ stays }: NearbyStaysProps) {
 
       <div className="mt-6 overflow-hidden">
         <div
-          className="flex transition-transform duration-1000 ease-in-out"
+          className="flex transition-transform duration-200 ease-out"
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {/* Page 1 (cards 1–5) */}

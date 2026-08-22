@@ -50,7 +50,7 @@ export function GuestFavouriteBadge({
           <span className="text-lg font-semibold text-neutral-900">
             {reviewCount}
           </span>
-          <span className="text-neutral-500">Reviews</span>
+          <span className="text-xs font-semibold text-neutral-800 underline">Reviews</span>
         </div>
       </div>
     </div>

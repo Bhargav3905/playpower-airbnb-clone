@@ -1,22 +1,47 @@
 interface TranslationNoticeProps {
+  isOriginal?: boolean;
+  onToggleOriginal?: () => void;
   onShowOriginal?: () => void;
 }
 
-/**
- * "Some info has been automatically translated. Show original"
- * Static notice banner — no real translation logic behind it yet.
- */
-export function TranslationNotice({ onShowOriginal }: TranslationNoticeProps) {
+export function TranslationNotice({
+  isOriginal = false,
+  onToggleOriginal,
+  onShowOriginal,
+}: TranslationNoticeProps) {
+  const handleClick = () => {
+    if (onToggleOriginal) {
+      onToggleOriginal();
+    } else if (onShowOriginal) {
+      onShowOriginal();
+    }
+  };
+
   return (
-    <div className="rounded-xl bg-neutral-100 px-6 py-4 text-sm text-neutral-900">
-      Some info has been automatically translated.{' '}
-      <button
-        type="button"
-        onClick={onShowOriginal}
-        className="font-medium underline"
-      >
-        Show original
-      </button>
+    <div className="rounded-xl bg-neutral-100 px-4 py-3.5 text-sm text-neutral-900">
+      {isOriginal ? (
+        <>
+          Showing original description.{' '}
+          <button
+            type="button"
+            onClick={handleClick}
+            className="font-semibold underline hover:text-black cursor-pointer"
+          >
+            Show translation
+          </button>
+        </>
+      ) : (
+        <>
+          Some info has been automatically translated.{' '}
+          <button
+            type="button"
+            onClick={handleClick}
+            className="font-semibold underline hover:text-black cursor-pointer"
+          >
+            Show original
+          </button>
+        </>
+      )}
     </div>
   );
 }
